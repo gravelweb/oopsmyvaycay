@@ -112,7 +112,9 @@ func startFileHandler(c <-chan string, counter chan<- bool) <-chan bool {
 
 			m, err := NewMedia(fpath)
 			if err != nil {
-				fmt.Printf("%v: Error %v\n", fpath, err)
+				if err != io.EOF {
+					fmt.Printf("%v: Error %v\n", fpath, err)
+				}
 				continue
 			}
 
