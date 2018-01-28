@@ -118,9 +118,24 @@ func startFileHandler(c <-chan string, counter chan<- bool) <-chan bool {
 				continue
 			}
 
-			counter <- true
-			m.DisplayDateTaken()
+			if stamp := m.DateStamp(); stamp != "" {
+				counter <- true
+				moveFileToDir(m.fpath, stamp)
+			}
 		}
 	}()
 	return done
+}
+
+func moveFileToDir(src, stamp string) {
+	dir := filepath.Join(".", "results", stamp)
+	os.MkdirAll(dir, os.ModePerm)
+
+	base := filepath.Base(src)
+	dst := filepath.Join(dir, base)
+
+	err := os.Rename(src, dst)
+	if err != nil {
+		fmt.Printf("%v -> %v: Error %v\n", src, dir, err)
+	}
 }

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/rwcarlsen/goexif/exif"
@@ -29,9 +28,7 @@ func NewMedia(fpath string) (*Media, error) {
 	return &Media{fpath, file, x}, nil
 }
 
-func (m *Media) DisplayDateTaken() {
+func (m *Media) DateStamp() string {
 	tm, _ := m.exif.DateTime()
-	if !tm.IsZero() {
-		fmt.Printf("%v: Taken on %v\n", m.fpath, tm)
-	}
+	return tm.Format("2006-01")
 }
